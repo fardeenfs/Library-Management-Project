@@ -226,7 +226,11 @@ def filter_show():
                 if i[4]==x:
                     filtered.add_row(i)
         print(filtered)
-    try_again=input("Search Again? (Y for yes/ Any Other Key For No) : ")
+    try_again=input("Search Again? (Y for yes/ S to See All Records/ Any Other Key For No) : ")
+
     if try_again=="Y" or try_again=="y":
         filter_show()
+    elif try_again=="S" or try_again=="s":
+        showall()
+    else:
         enter=input("Click Enter To Return To Home Screen : ")

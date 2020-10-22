@@ -3,6 +3,7 @@ import csv
 import datetime
 from prettytable import PrettyTable
 from Library_Management_Project.libresources import table2, table1, borrowal
+import time
 import os
 
 dbcon = datasrc.connect(host='localhost',
@@ -14,7 +15,7 @@ if dbcon.is_connected():
     print("Successfully Connected To The Database!")
 
 mycursor = dbcon.cursor()
-
+time.sleep(2)
 
 def setup():
     try:
@@ -22,24 +23,27 @@ def setup():
             settings = list(csv.reader(csettings))
             try:
                 if settings[0][1] != '' and settings[0][0] == "Name":
-                    print("Welcome Back", settings[0][1], "To The Library Management System!")
+                    print("\n Welcome Back", settings[0][1], "To The Library Management System!")
+                    time.sleep(2)
                     start()
                 else:
                     print("Some Of Your CSV files seems to be corrupted. \n Resetting...")
+                    time.sleep(2)
                     csettings.close()
                     csvclear = open("settings.csv", "w")
                     csvclear.close()
                     print("RESET SUCCESSFULLY! \n Restarting...")
+                    time.sleep(2)
                     setup()
             except IndexError:
                 print("Welcome To The Library Management System!")
-                print("--" * 50)
-                print(settings)
+                print("--" * 25)
                 name = input("We see that you are new! Please enter your name : ")
                 wset = open("settings.csv", "w")
                 wsettings = csv.writer(wset, delimiter=",")
                 wsettings.writerow(['Name', name])
                 print("Good To See You", name, "!")
+                time.sleep(2)
                 wset.close()
                 start()
     except:
@@ -105,5 +109,5 @@ def DatabaseCheck():
 setup()
 DatabaseCheck()
 table2.Table2Check()
-
+time.sleep(2)
 print("BYE")
