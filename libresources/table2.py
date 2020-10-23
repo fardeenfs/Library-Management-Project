@@ -14,13 +14,13 @@ def Table2Check():
     with open("startuptest.csv", mode="r") as cfile:
         read_data = list(csv.reader(cfile))
         try:
-            if read_data[1][1] == 'Y':
+            if read_data[0][1] == 'Y':
                 print("Tables Found")
                 cfile.close()
         except IndexError:
             cfile.close()
-            with open("startuptest.csv", mode="a+", newline='') as cfile:
-                mycursor.execute("DROP table IF Exists borrower_management")
+            with open("startuptest.csv", mode="w", newline='') as cfile:
+                mycursor.execute("DROP TABLE IF EXISTS borrower_management;")
                 mycursor.execute('''create table borrower_management(BID varchar(6) PRIMARY KEY,
                                                                         BookID varchar(4),
                                                                         StudentID varchar(4),                                                                                                                                                

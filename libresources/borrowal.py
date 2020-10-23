@@ -2,6 +2,7 @@ import mysql.connector as datasrc
 import csv
 import datetime
 from prettytable import PrettyTable
+from libresources import borrowal_filters
 
 
 dbcon = datasrc.connect(host='localhost',
@@ -41,7 +42,7 @@ def new_borrowal():
     New_Entry = input("Do you want to add another borrowal record? (Y for yes/ Any other key to exit) : ")
     if New_Entry == "Y":
         new_borrowal()
-        
+
 
 
 
@@ -85,7 +86,7 @@ def return_book():
             if try_again == 1:
                 return_book()
             elif try_again == 2:
-                showall()
+                borrowal_filters.showall()
     except ValueError:
         return_book()
 
@@ -104,9 +105,12 @@ def return_confirm(bid):
 def penalty_calculator():
     mycursor.execute("SELECT * FROM borrower_management")
     recs = mycursor.fetchall()
+    csettings=open("settings.csv")
+    settings=list(csv.reader(csettings))
+    x="Penalty @ Rs. "+settings[1][1]+" per delayed week"
     t = PrettyTable(
         ['Borrowal ID', 'Book ID', 'Student ID', 'Student First Name', 'Total Days Borrowed', 'Delay To Return',
-         'Fine (Rs. 100 per delayed week)'])
+         x])
     for rec in recs:
         if rec[7] != 'N':
             date_format = "%Y-%m-%d"
@@ -117,7 +121,7 @@ def penalty_calculator():
             fineable_days = days_taken - 7
             if days_taken <= 7:
                 fineable_days = 0
-            penalty = round(100 * (fineable_days / 7), 2)
+            penalty = round(float(settings[1][1]) * (fineable_days / 7), 2)
             t.add_row([rec[0], rec[1], rec[2], rec[3], days_taken, fineable_days, penalty])
     print(t.get_string(title="Penalty Applicable To Books Returned"))
 
@@ -127,7 +131,7 @@ def penalty_calculator():
     x = PrettyTable(
         ['Borrowal ID', 'Book ID', 'Student ID', 'Student First Name', 'Total Days Borrowed(Till Today)',
          'Delay To Return (Till Today)',
-         'Fine (Till Today)(Rs. 100 per delayed week)'])
+         x])
     for rec in recs:
         if rec[6] != 'Y':
             date_format = "%Y-%m-%d"
@@ -139,7 +143,7 @@ def penalty_calculator():
             fineable_days = days_taken - 7
             if days_taken <= 7:
                 fineable_days = 0
-            penalty = round(100 * (fineable_days / 7), 2)
+            penalty = round(float(settings[1][1]) * (fineable_days / 7), 2)
             x.add_row([rec[0], rec[1], rec[2], rec[3], days_taken, fineable_days, penalty])
     print(x.get_string(title="Penalty Applicable To Books Not Yet Returned"))
     enter=input("Click Enter To Return To Home Screen : ")
@@ -152,85 +156,4 @@ def csvall():
         for i in mycursor.fetchall():
             write_data.writerow(i)
         cfileall.close()
-        
-def showall():
-    with open('allresults.csv', 'r', newline='') as cfileall:
-        read_data = csv.reader(cfileall, delimiter=",")
-        t = PrettyTable(['BID', 'BookID', 'StudentID', 'Student First Name', 'Borrow Date', 'Compulsory Return Date',
-                         'Actual Return Date', 'Book_Returned'])
-        for i in read_data:
-            t.add_row(i)
-        print(t)
-    enter=input("Click Enter To Return To Home Screen : ")
 
-
-
-def filter_show():
-    with open('allresults.csv', 'r', newline='') as cfileall:
-        read_data = csv.reader(cfileall, delimiter=",")
-        t=PrettyTable(["Filter Code","Filter Based On"])
-        t.add_row(["1", "Borrowal ID"])
-        t.add_row(["2", "Book ID"])
-        t.add_row(["3", "Student ID"])
-        t.add_row(["4", "Student First Name"])
-        t.add_row(["5", "Borrow Date (Month and Year)"])
-        t.add_row(["6", "Borrow Date (Day,Month and Year)"])
-        print(t)
-        todo=input("Enter Filter Code To See Related Borrowal Information : ")
-        filtered = PrettyTable(['BID', 'BookID', 'StudentID', 'Student First Name', 'Borrow Date', 'Compulsory Return Date',
-                         'Actual Return Date', 'Book_Returned'])
-        if todo == "1":
-            x = input("Enter Borrowal ID : ")
-
-        elif todo == "2":
-            x = input("Enter Book ID : ")
-
-        elif todo == "3":
-            x = input("Enter Student ID : ")
-
-        elif todo == "4":
-            x = input("Enter Student First Name : ")
-
-        elif todo == "5":
-            y = input("Enter Borrowal Year (YYYY): ")
-            m = input("Enter Borrowal Month (MM): ")
-            x = y + '-' + m
-
-        elif todo == "6":
-            y = input("Enter Borrowal Year : ")
-            m = input("Enter Borrowal Month : ")
-            d = input("Enter Borrowal Day : ")
-            x = y + '-' + m + '-' + d
-
-        else:
-            print("Please Enter Appropriate Value!")
-            filter_show()
-
-        for i in read_data:
-            if todo=="1":
-                if i[0]==x:
-                    filtered.add_row(i)
-            elif todo=="2":
-                if i[1]==x:
-                    filtered.add_row(i)
-            elif todo=="3":
-                if i[2]==x:
-                    filtered.add_row(i)
-            elif todo=="4":
-                if i[3]==x:
-                    filtered.add_row(i)
-            elif todo=="5":
-                if i[4][:-3]==x:
-                    filtered.add_row(i)
-            elif todo=="6":
-                if i[4]==x:
-                    filtered.add_row(i)
-        print(filtered)
-    try_again=input("Search Again? (Y for yes/ S to See All Records/ Any Other Key For No) : ")
-
-    if try_again=="Y" or try_again=="y":
-        filter_show()
-    elif try_again=="S" or try_again=="s":
-        showall()
-    else:
-        enter=input("Click Enter To Return To Home Screen : ")
