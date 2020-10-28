@@ -56,26 +56,41 @@ def start():
         t.add_row(["1", "Check Book Info Information"])
         t.add_row(["2", "Check Book Borrowal Information"])
         t.add_row(["3", "Add A New Book"])
-        t.add_row(["4", "Add A New Borrowal Record"])
-        t.add_row(["5", "Add A Book Returned Record"])
-        t.add_row(["6", "View Penalties And Fines"])
-        t.add_row(["7", "Settings"])
+        t.add_row(["4", "Update Book Details"])
+        t.add_row(["5", "Remove A Book"])
+        t.add_row(["6", "Add A New Borrowal Record"])
+        t.add_row(["7", "Add A Book Returned Record"])
+        t.add_row(["8", "View Penalties And Fines"])
+        t.add_row(["9", "Settings"])
         print(t)
         todo = int(input("Enter To Do Code to get started: "))
-        if todo == 2:
+        if todo == 1:
+            table1.book_search()
+            start()
+        elif todo == 2:
             borrowal_filters.filter_show()
             start()
+        elif todo == 3:
+            table1.book_add()
+            start()
         elif todo == 4:
-            borrowal.new_borrowal()
+            table1.book_update()
             start()
         elif todo == 5:
-            borrowal.return_book()
+            table1.book_remove()
             start()
         elif todo == 6:
-            borrowal.penalty_calculator()
+            borrowal.new_borrowal()
             start()
         elif todo == 7:
+            borrowal.return_book()
+            start()
+        elif todo == 8:
+            borrowal.penalty_calculator()
+            start()
+        elif todo == 9:
             settings()
+            start()
     except ValueError:
         print("Please Enter A Valid TO DO Code!")
         start()
@@ -105,11 +120,9 @@ def settings():
     with open("settings.csv", "r") as csettings:
         settings = list(csv.reader(csettings))
         t = PrettyTable(["Serial No. ", "Field", "Value"])
-        print(settings)
         count = 0
         for i in settings:
             count += 1
-            print(i)
             i = [str(count)] + i
             t.add_row(i)
         print(t)
@@ -140,7 +153,7 @@ def edit_settings(fld, uv):
     settings()
 
 
-table2.Table2Check()
+table2.TablesCheck()
 setup()
 # start()
 
