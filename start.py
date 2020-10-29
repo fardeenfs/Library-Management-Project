@@ -1,7 +1,7 @@
 import mysql.connector as datasrc
 import csv
 from prettytable import PrettyTable
-from libresources import table2, table1, borrowal, borrowal_filters
+from libresources import tables, bookfuncs, borrowal, borrowal_filters
 import time
 
 dbcon = datasrc.connect(host='localhost',
@@ -65,19 +65,19 @@ def start():
         print(t)
         todo = int(input("Enter To Do Code to get started: "))
         if todo == 1:
-            table1.book_search()
+            bookfuncs.book_search()
             start()
         elif todo == 2:
             borrowal_filters.filter_show()
             start()
         elif todo == 3:
-            table1.book_add()
+            bookfuncs.book_add()
             start()
         elif todo == 4:
-            table1.book_update()
+            bookfuncs.book_update()
             start()
         elif todo == 5:
-            table1.book_remove()
+            bookfuncs.book_remove()
             start()
         elif todo == 6:
             borrowal.new_borrowal()
@@ -153,7 +153,7 @@ def edit_settings(fld, uv):
     settings()
 
 
-table2.TablesCheck()
+tables.TablesCheck()
 setup()
 # start()
 
