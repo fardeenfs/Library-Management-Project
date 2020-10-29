@@ -30,8 +30,8 @@ def TablesCheck():
                                                             Quantity varchar(4));''')
                 mycursor.execute("DROP TABLE IF EXISTS borrower_management;")
                 mycursor.execute('''create table borrower_management (BID varchar(6) PRIMARY KEY,
-                                                                        BookID varchar(4) REFERENCES BookInfo(BookID) ,
-                                                                        StudentID varchar(4),                                                                                                                                                
+                                                                        BookID varchar(6) REFERENCES BookInfo(BookID) ,
+                                                                        StudentID varchar(10),                                                                                                                                                
                                                                         StudentFirstName varchar(30),                                                                        
                                                                         Borrow_Date date,
                                                                         Compulsory_Return_Date date,
@@ -73,7 +73,7 @@ def tablevalues():
     f2 = ["Introduction to computers- Junior level", "The killing woods", "The thirteenth mystery",
           "R.D Sharma Class 12", "Uttar vigyan"]
     f3 = ["Amit garg", "Lucy Christopher", "Michael Dahl", "R.D Sharma", "Preeti Agarwal"]
-    f4 = ["Computer Science", "Litereature-Fiction", "Litereature-Fiction", "Maths", "Hindi"]
+    f4 = ["Computer Science", "Literature-Fiction", "Literature-Fiction", "Maths", "Hindi"]
     f5 = ["BZN127YTER120", "QYD947JND492", "PTK385NIFC863", "GSV530JFSO932", "HWQ938FNPS348"]
     f6 = ["Reader's Zone","Scholastic","Chicken House","Dhanpat Rai","Arihant"]
     f7 = [3, 6, 4, 5, 2]

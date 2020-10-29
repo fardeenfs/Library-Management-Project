@@ -20,14 +20,14 @@ def new_borrowal():
     x = len(recs)
     lastbid = int(recs[x - 1][0]) + 1
     try:
-        a = int(input("Enter BookID : "))
+        a = input("Enter BookID : ")
         b = input("Enter Student ID :")
         c = ''
         for rec in recs:
             if rec[2] == b:
                 c = rec[3]
         if c == '':
-            c = input("Looks Like This Student Is New! Enter Student's First Name : ")
+            c = (input("Looks Like This Student Is New! Enter Student's First Name : ")).title()
         d = input("Enter the date of borrowal in YYYY-MM-DD (Leave Empty For Today):")
         if d == '':
             d = datetime.datetime.today().strftime('%Y-%m-%d')
@@ -40,16 +40,16 @@ def new_borrowal():
                     mycursor.execute(
                         "insert into borrower_management(BID,BookID,StudentID,StudentFirstName,Borrow_Date,Compulsory_Return_Date,Book_Returned) values(%s,%s,%s,%s,%s,%s,%s);",
                         (lastbid, a, b, c, d, e, 'N'))
-                    mycursor.execute("UPDATE BookInfo set Quantity=%s where BookID=%s;",(rec[6]-1,a))
+                    mycursor.execute("UPDATE BookInfo set Quantity=%s where BookID=%s;",(int(rec[6])-1,a))
                     print("Borrowal Record Added!")
         dbcon.commit()
         csvall()
     except ValueError:
         print("Please Enter An Appropriate Value!")
-        new_borrowal()
+        print("Returning To Home...")
 
     New_Entry = input("Do you want to add another borrowal record? (Y for yes/ Any other key to exit) : ")
-    if New_Entry == "Y":
+    if New_Entry == "Y" or "y":
         new_borrowal()
 
 
@@ -72,6 +72,9 @@ def return_book():
                     mycursor.execute(
                         "SELECT BID,BookID,StudentID,StudentFirstName,Borrow_Date,Compulsory_Return_Date,Book_Returned from borrower_management where BookID = %s ;",
                         (bookid,))
+                else:
+                    print("All Results...")
+                    mycursor.execute("SELECT BID,BookID,StudentID,StudentFirstName,Borrow_Date,Compulsory_Return_Date,Book_Returned FROM borrower_management;")
         t = PrettyTable(
             ['Borrowal ID', 'Book ID', 'Student ID', 'Student First Name', 'Borrow Date', 'Compulsory Return Date',
              'Book Returned?'])
@@ -96,7 +99,9 @@ def return_book():
             elif try_again == 2:
                 borrowal_filters.showall()
     except ValueError:
-        return_book()
+        print("Please Enter Appropriate Values!")
+        print("Returning To Home Menu...")
+        print()
 
 
 def return_confirm(bid):
@@ -105,9 +110,14 @@ def return_confirm(bid):
         d = datetime.datetime.today().strftime('%Y-%m-%d')
     mycursor.execute("UPDATE borrower_management SET Actual_Return_Date = %s, Book_Returned = '"
                      "Y' WHERE BID= %s ;", (d, bid))
+    mycursor.execute("Select * from borrower_management where BID= %s;",  (int(bid),))
+    x=mycursor.fetchone()
+    mycursor.execute("Select * from BookInfo where BookID=%s;",(x[1],))
+    q=mycursor.fetchone()
+    mycursor.execute("UPDATE BookInfo set Quantity=%s where BookID=%s;", (int(q[6]) + 1, x[0]))
     dbcon.commit()
     csvall()
-
+    print("Book Returned Successfully! ")
 
 def penalty_calculator():
     mycursor.execute("SELECT BID,borrower_management.BookID,StudentID,StudentFirstName,BookName,Borrow_Date,Compulsory_Return_Date,Actual_Return_Date,Book_Returned from borrower_management,BookInfo where borrower_management.BookID=BookInfo.BookID;")
