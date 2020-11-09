@@ -36,7 +36,8 @@ def setup():
                 setup()
 
     except (IndexError, FileNotFoundError):
-        print(PrettyTable(["Weclome To The Library Management System!"]))
+        print()
+        print("Weclome To The Library Management System!")
         name = input("We see that you are new! Please enter your name : ")
         wset = open("settings.csv", "w", newline='')
         wsettings = csv.writer(wset, delimiter=",")
@@ -59,9 +60,10 @@ def start():
         t.add_row(["4", "Update Book Details"])
         t.add_row(["5", "Remove A Book"])
         t.add_row(["6", "Add A New Borrowal Record"])
-        t.add_row(["7", "Add A Book Returned Record"])
+        t.add_row(["7", "Return A Book"])
         t.add_row(["8", "View Penalties And Fines"])
         t.add_row(["9", "Settings"])
+        t.add_row(["10","Exit"])
         print(t)
         todo = int(input("Enter To Do Code to get started: "))
         if todo == 1:
@@ -91,7 +93,7 @@ def start():
         elif todo == 9:
             settings()
             start()
-        else:
+        elif todo == 10:
             print("BYE! See you soon!")
     except ValueError:
         print("Please Enter A Valid TO DO Code!")

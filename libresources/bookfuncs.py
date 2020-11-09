@@ -81,7 +81,7 @@ def book_update():
         print("Record Updated Successfully!")
         enter = input("Click Enter To Return To Home Page : ")
     elif ch1 == "":
-        print("Returning To Home...")
+        print("Returning To Home Menu...")
         time.sleep(1)
     else:
         print("You have entered the wrong choice for updating please try again!")
