@@ -20,8 +20,8 @@ def new_borrowal():
     x = len(recs)
     lastbid = int(recs[x - 1][0]) + 1
     try:
-        a = input("Enter BookID : ")
-        b = input("Enter Student ID :")
+        a = int(input("Enter BookID : "))
+        b = int(input("Enter Student ID :"))
         c = ''
         for rec in recs:
             if rec[2] == b:

@@ -91,6 +91,8 @@ def start():
         elif todo == 9:
             settings()
             start()
+        else:
+            print("BYE! See you soon!")
     except ValueError:
         print("Please Enter A Valid TO DO Code!")
         start()
