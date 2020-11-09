@@ -44,13 +44,14 @@ def new_borrowal():
                     print("Borrowal Record Added!")
         dbcon.commit()
         csvall()
+        New_Entry = input("Do you want to add another borrowal record? (Y for yes/ Any other key to exit) : ")
+        if New_Entry == "Y" or "y":
+            new_borrowal()
+
     except ValueError:
         print("Please Enter An Appropriate Value!")
-        print("Returning To Home...")
-
-    New_Entry = input("Do you want to add another borrowal record? (Y for yes/ Any other key to exit) : ")
-    if New_Entry == "Y" or "y":
-        new_borrowal()
+        print("Returning To Home Menu...")
+        print()
 
 
 def return_book():
